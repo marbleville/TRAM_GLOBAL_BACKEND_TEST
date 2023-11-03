@@ -1,5 +1,24 @@
+// Stores prefrences
+const settings = {
+	urlLength: 6,
+	urlStarter: "https://lehrhardt.link/",
+};
+
+// Keyed by username and value is an array of long URLs given by that user
+let userMap = new Map();
+
+// Stores the shortURL and ogURL given by a user
+let URLObj = {
+	shortURL: "",
+	ogURL: "",
+	user: "",
+};
+
+// Keyed by shortURL id and value is the URLObj
+let URLMap = new Map();
+
 // Makes an id of the given length and returns it
-function generateID(URLMap) {
+function generateID() {
 	let id = "";
 	let chars =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -16,7 +35,7 @@ function generateID(URLMap) {
 	return id;
 }
 
-function longURLToShort(longURL, user, userMap, URLMap) {
+function longURLToShort(longURL, user) {
 	let shortURL = "";
 	let id = generateID();
 	shortURL = settings.urlStarter + id;
@@ -36,4 +55,10 @@ function longURLToShort(longURL, user, userMap, URLMap) {
 	return shortURL;
 }
 
-module.exports = { generateID, longURLToShort };
+// returns the long URL given the short URL
+function shortURLtoLong(shortURL) {
+	let id = shortURL.slice(settings.urlStarter.length);
+	return URLMap.get(id).ogURL;
+}
+
+module.exports = { generateID, longURLToShort, shortURLtoLong };
