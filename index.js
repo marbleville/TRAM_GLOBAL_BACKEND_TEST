@@ -5,13 +5,18 @@ const port = 3000;
 
 // Get short URL from long URL endpoint
 app.get("/shorten/:user/:longURL/:id", function (req, res) {
-	res.send(
-		functions.longURLToShort(
-			req.params.longURL,
-			req.params.user,
-			req.params.id
-		)
+	let url = functions.longURLToShort(
+		req.params.longURL,
+		req.params.user,
+		req.params.id
 	);
+
+	// If teir is exceeded send 403 error
+	if (url === functions.settings.tierErrorMsg) {
+		res.status(403).send(url);
+	} else {
+		res.send(url);
+	}
 });
 
 // Redirect endpoint for short URLs
