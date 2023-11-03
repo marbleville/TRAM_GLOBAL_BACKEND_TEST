@@ -118,8 +118,8 @@ function getTierLimit(user) {
 }
 
 function updateUserTier(user, tier) {
-	let obj = userMap.get(user);
-	if (tier <= 3) {
+	if (tier <= 3 && userMap.has(user)) {
+		let obj = userMap.get(user);
 		obj.teir = tier;
 		userMap.set(user, obj);
 		return 200;
