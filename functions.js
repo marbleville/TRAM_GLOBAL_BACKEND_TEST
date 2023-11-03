@@ -2,6 +2,7 @@
 const settings = {
 	urlLength: 6,
 	urlStarter: "https://lehrhardt.link/",
+	maxIdLength: 30,
 };
 
 // Keyed by username and value is an array of long URLs given by that user
@@ -27,7 +28,7 @@ function generateID() {
 		id += chars.charAt(Math.floor(Math.random() * chars.length));
 	}
 
-	// Enures unique ids
+	// Ensures unique ids
 	if (URLMap.has(id)) {
 		generateID();
 	}
@@ -35,15 +36,25 @@ function generateID() {
 	return id;
 }
 
-function longURLToShort(longURL, user) {
+function longURLToShort(longURL, user, givenId) {
 	let shortURL = "";
-	let id = generateID();
+	// user can optionally give and id for the short url
+	let id =
+		givenId.equals("") || givenId.length > settings.maxIdLength
+			? generateID()
+			: givenId;
+
 	shortURL = settings.urlStarter + id;
+
+	// Create DB object
 	let o = Object.create(URLObj);
 	o.shortURL = shortURL;
 	o.ogURL = longURL;
 	o.user = user;
+
 	URLMap.set(id, o);
+
+	// Update user history
 	if (userMap.has(user)) {
 		let arr = userMap.get(user);
 		arr.push(longURL);
@@ -61,4 +72,9 @@ function shortURLtoLong(shortURL) {
 	return URLMap.get(id).ogURL;
 }
 
-module.exports = { generateID, longURLToShort, shortURLtoLong };
+// Returns all URLs given by a user
+function getURLs(user) {
+	return userMap.get(user);
+}
+
+module.exports = { generateID, longURLToShort, shortURLtoLong, getURLs };
