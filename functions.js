@@ -117,10 +117,22 @@ function getTierLimit(user) {
 	}
 }
 
+function updateUserTier(user, tier) {
+	let obj = userMap.get(user);
+	if (tier <= 3) {
+		obj.teir = tier;
+		userMap.set(user, obj);
+		return 200;
+	}
+
+	return 400;
+}
+
 module.exports = {
 	generateID,
 	longURLToShort,
 	shortURLtoLong,
 	getURLs,
+	updateUserTier,
 	settings,
 };

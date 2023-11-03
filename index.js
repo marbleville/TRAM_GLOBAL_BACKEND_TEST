@@ -28,3 +28,8 @@ app.get("/redir/:shortURL", function (req, res) {
 app.get("/urls/:user", function (req, res) {
 	res.send(functions.getURLs(req.params.user));
 });
+
+// Update a user's tier
+app.post("/newTier/:user/:tier", function (req, res) {
+	res.status(functions.updateUserTier(req.params.user, req.params.tier));
+});
