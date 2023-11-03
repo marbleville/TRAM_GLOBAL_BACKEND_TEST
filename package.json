@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/marbleville/TRAM_GLOBAL_BACKEND_TEST/issues"
   },
-  "homepage": "https://github.com/marbleville/TRAM_GLOBAL_BACKEND_TEST#readme"
+  "homepage": "https://github.com/marbleville/TRAM_GLOBAL_BACKEND_TEST#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
