@@ -3,9 +3,9 @@ const settings = {
 	urlLength: 6,
 	urlStarter: "https://lehrhardt.link/",
 	maxIdLength: 30,
-	tier1: 100,
-	tier2: 500,
-	tier3: 1000,
+	tier1: 1,
+	tier2: 1,
+	tier3: 1,
 	tierErrorMsg: "You cannot create any more short URLs.",
 };
 
@@ -58,7 +58,7 @@ function longURLToShort(longURL, user, givenId) {
 	let shortURL = "";
 	// user can optionally give and id for the short url
 	let id =
-		givenId.equals("") || givenId.length > settings.maxIdLength
+		givenId === "" || givenId.length > settings.maxIdLength
 			? generateID()
 			: givenId;
 
@@ -95,11 +95,18 @@ function longURLToShort(longURL, user, givenId) {
 // returns the long URL given the short URL
 function shortURLtoLong(shortURL) {
 	let id = shortURL.slice(settings.urlStarter.length);
+	if (!URLMap.has(id)) {
+		throw new Error("URL not found");
+	}
+
 	return URLMap.get(id).ogURL;
 }
 
 // Returns all URLs given by a user
 function getURLs(user) {
+	if (!userMap.has(user)) {
+		throw new Error("User not found");
+	}
 	return userMap.get(user);
 }
 
@@ -118,9 +125,10 @@ function getTierLimit(user) {
 }
 
 function updateUserTier(user, tier) {
-	if (tier <= 3 && userMap.has(user)) {
+	let t = parseInt(tier);
+	if (t <= 3 && userMap.has(user)) {
 		let obj = userMap.get(user);
-		obj.teir = tier;
+		obj.teir = t;
 		userMap.set(user, obj);
 		return 200;
 	}
